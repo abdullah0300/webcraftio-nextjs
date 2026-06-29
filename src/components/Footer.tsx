@@ -14,7 +14,7 @@ const STUDIO_LINKS = [
   { label: "Contact", href: "#start" },
 ];
 const CONNECT_LINKS = [
-  { label: "hello@webcraftio.studio", href: "#start" },
+  { label: "info@webcraftio.com", href: "#start" },
   { label: "Twitter / X", href: "#" },
   { label: "LinkedIn", href: "#" },
   { label: "Dribbble", href: "#" },
@@ -174,7 +174,7 @@ export default function Footer({ footRef, year }: FooterProps) {
             color: "#6E7B73",
           }}
         >
-          <span>© {year} WebCraftio — Built with care, not templates. All rights reserved.</span>
+          <span>© {year} WebCraftio — Handcrafted from scratch. No templates, just pure vibes.</span>
           <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
             <a href="#" className="footerLink" style={{ color: "#6E7B73", textDecoration: "none", transition: "color .25s" }}>
               Privacy

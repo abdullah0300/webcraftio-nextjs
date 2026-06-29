@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useCallback, useState, useEffect } from "react";
+import Image from "next/image";
 import KineticText from "./KineticText";
 
 interface WorkProps {
@@ -80,10 +81,10 @@ export default function Work({
   const detailCols = narrow ? "1fr" : "1.05fr 1fr";
   const visualDisplay = narrow ? "none" : "flex";
 
-  const d1L = openCard === 0 ? "translateX(-101%)" : "translateX(0)";
-  const d1R = openCard === 0 ? "translateX(101%)" : "translateX(0)";
-  const d2L = openCard === 1 ? "translateX(-101%)" : "translateX(0)";
-  const d2R = openCard === 1 ? "translateX(101%)" : "translateX(0)";
+  const d1L = openCard === 0 ? "translate(-101%, 101%)" : "translate(0, 0)";
+  const d1R = openCard === 0 ? "translate(101%, -101%)" : "translate(0, 0)";
+  const d2L = openCard === 1 ? "translate(-101%, 101%)" : "translate(0, 0)";
+  const d2R = openCard === 1 ? "translate(101%, -101%)" : "translate(0, 0)";
   const card1CloseDisp = openCard === 0 ? "flex" : "none";
   const card2CloseDisp = openCard === 1 ? "flex" : "none";
 
@@ -244,6 +245,7 @@ export default function Work({
               flipBadge="AI FINANCE"
               flipYear="2026"
               siteUrl="https://smartcfo.app"
+              coverImg="https://images.unsplash.com/photo-1554224155-3a58922a22c3?q=80&w=1141&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               toggleOpen={toggleCard2}
               closeCard={closeCard}
               closeDisplay={card2CloseDisp}
@@ -292,6 +294,7 @@ export default function Work({
               flipBadge="TMS PLATFORM"
               flipYear="2026"
               siteUrl="https://www.truckerscall.com/"
+              coverImg="/truckers.jpg"
               toggleOpen={toggleCard1}
               closeCard={closeCard}
               closeDisplay={card1CloseDisp}
@@ -335,6 +338,7 @@ interface ProjectCardProps {
   onProjEnter: (e: React.MouseEvent<HTMLDivElement>) => void;
   onProjLeave: (e: React.MouseEvent<HTMLDivElement>) => void;
   siteUrl?: string;
+  coverImg?: string;
 }
 
 function ProjectCard({
@@ -362,6 +366,7 @@ function ProjectCard({
   onProjEnter,
   onProjLeave,
   siteUrl,
+  coverImg,
 }: ProjectCardProps) {
   return (
     <div
@@ -374,10 +379,9 @@ function ProjectCard({
         height: "100%",
         border: "1px solid #E7ECE7",
         borderRadius: 32,
-        boxShadow: "0 40px 90px -42px rgba(20,70,54,.35)",
         overflow: "hidden",
-        willChange: "transform, opacity",
-        transition: "transform .1s linear, opacity .1s linear",
+        transform: "translateZ(0)",
+        boxShadow: "0 40px 90px -42px rgba(20,70,54,.35)",
       }}
     >
       <div style={{ position: "absolute", inset: 0, zIndex: 1, display: "grid", gridTemplateColumns: detailCols, background: "#fff" }}>
@@ -556,28 +560,27 @@ function ProjectCard({
         Visit site ↗
       </a>
 
-      <div
+      <svg
         style={{
           position: "absolute",
-          top: 0,
-          bottom: 0,
-          left: "50%",
-          width: 1,
-          background: "repeating-linear-gradient(#CDEFE2,#CDEFE2 6px,transparent 6px,transparent 12px)",
+          inset: 0,
+          width: "100%",
+          height: "100%",
           zIndex: 4,
           pointerEvents: "none",
         }}
-      />
+      >
+        <line x1="0" y1="0" x2="100%" y2="100%" stroke="#CDEFE2" strokeWidth="1.5" strokeDasharray="6,6" />
+      </svg>
 
-      <FlipHalf side="left" clipInset="0 49.8% 0 0" transform={dL} onClick={toggleOpen} num={num} badge={flipBadge} year={flipYear} title={flipTitle} desc={flipDesc} />
-      <FlipHalf side="right" clipInset="0 0 0 49.8%" transform={dR} onClick={toggleOpen} num={num} badge={flipBadge} year={flipYear} title={flipTitle} desc={flipDesc} />
+      <FlipHalf side="left" transform={dL} onClick={toggleOpen} num={num} badge={flipBadge} year={flipYear} title={flipTitle} desc={flipDesc} coverImg={coverImg} />
+      <FlipHalf side="right" transform={dR} onClick={toggleOpen} num={num} badge={flipBadge} year={flipYear} title={flipTitle} desc={flipDesc} coverImg={coverImg} />
     </div>
   );
 }
 
 function FlipHalf({
   side,
-  clipInset,
   transform,
   onClick,
   num,
@@ -585,17 +588,22 @@ function FlipHalf({
   year,
   title,
   desc,
+  coverImg,
 }: {
   side: "left" | "right";
-  clipInset: string;
   transform: string;
   onClick: () => void;
   num: string;
-  badge: string;
+  badge: React.ReactNode;
   year: string;
   title: string;
   desc: string;
+  coverImg?: string;
 }) {
+  const isImageSide = side === "right";
+  const maskL = `url("data:image/svg+xml,%3Csvg width='10' height='10' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='0,0 0,10 10,10' fill='black' /%3E%3C/svg%3E")`;
+  const maskR = `url("data:image/svg+xml,%3Csvg width='10' height='10' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='0,0 10,0 10,10' fill='black' /%3E%3C/svg%3E")`;
+
   return (
     <div
       data-cl={side === "left" ? "" : undefined}
@@ -605,115 +613,116 @@ function FlipHalf({
         position: "absolute",
         inset: 0,
         zIndex: 5,
-        clipPath: `inset(${clipInset})`,
+        WebkitMaskImage: side === "left" ? maskL : maskR,
+        maskImage: side === "left" ? maskL : maskR,
+        WebkitMaskSize: "100% 100%",
+        maskSize: "100% 100%",
         transform,
         transition: "transform .72s cubic-bezier(.76,0,.18,1)",
         willChange: "transform",
         cursor: "pointer",
+        background: isImageSide ? "#15181A" : "#FBFCFA",
       }}
     >
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#FBFCFA",
-          padding: "clamp(28px,6vw,60px)",
-        }}
-      >
-        <span
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%,-50%)",
-            fontWeight: 700,
-            fontSize: "clamp(200px,42vw,680px)",
-            lineHeight: 0.7,
-            color: "#F1F6F2",
-            letterSpacing: "-.05em",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        >
-          {num}
-        </span>
+      {isImageSide ? (
+        <div style={{ position: "absolute", inset: 0 }}>
+          {coverImg && (
+            <Image
+              src={coverImg}
+              alt={title}
+              fill
+              style={{ objectFit: "cover", objectPosition: "80% 20%" }}
+              sizes="(max-width: 1200px) 100vw, 1200px"
+              priority
+            />
+          )}
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(225deg, transparent 40%, rgba(21,24,26,0.3) 100%)" }} />
+        </div>
+      ) : (
         <div
           style={{
             position: "absolute",
-            top: "clamp(28px,5vw,60px)",
-            left: 0,
-            right: 0,
+            inset: 0,
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 14,
-            zIndex: 2,
+            flexDirection: "column",
+            alignItems: "flex-start",
+            justifyContent: "flex-end",
+            padding: "clamp(24px, 5vw, 60px)",
+            paddingRight: "clamp(60px, 15vw, 200px)",
+            boxSizing: "border-box",
           }}
         >
           <span
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 7,
-              background: "#E9FBF4",
-              color: "#0FA882",
-              padding: "8px 15px",
-              borderRadius: 999,
-              fontFamily: "var(--font-jetbrains-mono), monospace",
-              fontSize: 12,
+              position: "absolute",
+              top: "-5%",
+              left: "-3%",
+              fontWeight: 700,
+              fontSize: "clamp(180px, 35vw, 540px)",
+              lineHeight: 0.7,
+              color: "#F1F6F2",
+              letterSpacing: "-.05em",
+              pointerEvents: "none",
+              zIndex: 0,
             }}
           >
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#15C79A", display: "inline-block" }} />
-            {badge}
+            {num}
           </span>
-          <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 12, color: "#8A918B" }}>{year}</span>
-        </div>
-        <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: 16, textAlign: "center" }}>
-          <h3 style={{ fontSize: "clamp(40px,8vw,120px)", lineHeight: 0.88, letterSpacing: "-.05em", fontWeight: 700, margin: 0, color: "#15181A" }}>
-            {title}
-          </h3>
-          <p style={{ maxWidth: 420, fontSize: "clamp(14px,1.2vw,17px)", color: "#6B726B", lineHeight: 1.5, margin: 0 }}>{desc}</p>
-        </div>
-        <div style={{ position: "absolute", bottom: "clamp(30px,5vw,52px)", left: 0, right: 0, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}>
-          <span
-            className="viewDetailsPill"
+          <div
             style={{
-              display: "inline-flex",
+              position: "relative",
+              display: "flex",
               alignItems: "center",
-              gap: 10,
-              background: "#15181A",
-              color: "#fff",
-              padding: "13px 22px",
-              borderRadius: 999,
-              fontFamily: "var(--font-jetbrains-mono), monospace",
-              fontSize: 12.5,
-              boxShadow: "0 16px 30px -14px rgba(20,40,33,.5)",
-              transition: "transform .3s cubic-bezier(.2,1.4,.4,1)",
+              gap: 14,
+              zIndex: 2,
+              marginBottom: 16,
             }}
           >
-            View details
             <span
               style={{
-                width: 22,
-                height: 22,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 7,
+                background: "#E9FBF4",
+                color: "#0FA882",
+                padding: "8px 15px",
+                borderRadius: 999,
+                fontFamily: "var(--font-jetbrains-mono), monospace",
+                fontSize: 12,
+              }}
+            >
+              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#15C79A", display: "inline-block" }} />
+              {badge}
+            </span>
+            <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 12, color: "#8A918B" }}>{year}</span>
+          </div>
+          <h3 style={{ position: "relative", zIndex: 2, fontSize: "clamp(32px, 4vw, 64px)", lineHeight: 0.88, letterSpacing: "-.05em", fontWeight: 700, margin: 0, color: "#15181A", maxWidth: "90%" }}>
+            {title}
+          </h3>
+          <p style={{ position: "relative", zIndex: 2, maxWidth: "85%", fontSize: "clamp(13px, 1.1vw, 16px)", color: "#6B726B", lineHeight: 1.5, marginTop: 12, marginBottom: 24 }}>
+            {desc}
+          </p>
+          <div style={{ position: "relative", zIndex: 2, display: "flex", alignItems: "center", gap: 11, fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 13, color: "#15181A", fontWeight: 600 }}>
+            <span
+              style={{
+                width: 44,
+                height: 44,
                 borderRadius: "50%",
-                background: "#6FE7C0",
-                color: "#0A2A22",
+                background: "#15181A",
+                color: "#fff",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: 12,
+                fontSize: 16,
+                transition: "transform .3s",
               }}
             >
               →
             </span>
-          </span>
+            Explore case
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

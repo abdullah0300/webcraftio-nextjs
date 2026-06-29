@@ -130,7 +130,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`${spaceGrotesk.variable} ${jetBrainsMono.variable}`}>
+      <body className={`${spaceGrotesk.variable} ${jetBrainsMono.variable}`} suppressHydrationWarning>
         {children}
       </body>
     </html>

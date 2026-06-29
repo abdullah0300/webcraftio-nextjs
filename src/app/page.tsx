@@ -48,11 +48,11 @@ export default function Home() {
       const c1 = card1Ref.current;
       const c2 = card2Ref.current;
       if (c1) {
-        c1.style.transform = `translateY(${-100 * u}vh) scale(${1 - u * 0.04})`;
+        c1.style.transform = `translateY(${-100 * u}vh) translateZ(0)`;
         c1.style.pointerEvents = u < 0.5 ? "auto" : "none";
       }
       if (c2) {
-        c2.style.transform = `translateY(${(1 - u) * 5}vh) scale(${0.95 + u * 0.05})`;
+        c2.style.transform = `translateY(${(1 - u) * 5}vh) translateZ(0)`;
         c2.style.pointerEvents = u >= 0.5 ? "auto" : "none";
       }
       const ap = u < 0.5 ? 0 : 1;
