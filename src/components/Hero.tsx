@@ -148,6 +148,7 @@ export default function Hero({ heroWrapRef, activeStage, rotIndex, goStage }: He
 
         {/* Right-side stage rail */}
         <div
+          className="heroRail"
           style={{
             position: "absolute",
             right: 30,
@@ -209,6 +210,7 @@ export default function Hero({ heroWrapRef, activeStage, rotIndex, goStage }: He
 
         {/* Stage 0 — intro */}
         <div
+          className="heroStageZero"
           style={{
             position: "absolute",
             inset: 0,
@@ -222,6 +224,7 @@ export default function Hero({ heroWrapRef, activeStage, rotIndex, goStage }: He
         >
           <div
             ref={blobRef}
+            className="heroBlob"
             style={{
               position: "absolute",
               top: "42%",
@@ -245,6 +248,7 @@ export default function Hero({ heroWrapRef, activeStage, rotIndex, goStage }: He
           </div>
 
           <div
+            className="heroIntroTag"
             style={{
               position: "absolute",
               top: 118,
@@ -277,6 +281,7 @@ export default function Hero({ heroWrapRef, activeStage, rotIndex, goStage }: He
           </div>
 
           <div
+            className="heroWidget"
             style={{
               position: "absolute",
               top: 124,
@@ -295,6 +300,7 @@ export default function Hero({ heroWrapRef, activeStage, rotIndex, goStage }: He
           </div>
 
           <div
+            className="heroTitleContainer"
             style={{
               position: "absolute",
               top: "50%",
@@ -352,6 +358,7 @@ export default function Hero({ heroWrapRef, activeStage, rotIndex, goStage }: He
           </div>
 
           <div
+            className="heroIntroDesc"
             style={{
               position: "absolute",
               bottom: 52,
@@ -408,6 +415,7 @@ export default function Hero({ heroWrapRef, activeStage, rotIndex, goStage }: He
           </div>
 
           <div
+            className="heroScrollBadge"
             style={{
               position: "absolute",
               bottom: 46,
@@ -551,6 +559,7 @@ function StagePanel({
 }) {
   return (
     <div
+      className="stagePanelWrapper"
       style={{
         position: "absolute",
         inset: 0,
@@ -566,6 +575,7 @@ function StagePanel({
       }}
     >
       <div
+        className="stagePanelGrid"
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
@@ -695,6 +705,7 @@ function StageVisual({
 }) {
   return (
     <div
+      className="stageVisualContainer"
       style={{
         position: "relative",
         display: "flex",
