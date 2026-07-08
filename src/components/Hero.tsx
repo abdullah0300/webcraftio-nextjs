@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useCallback } from "react";
+import ClutchWidget from "./ClutchWidget";
 import KineticText from "./KineticText";
 
 interface HeroProps {
@@ -289,7 +290,8 @@ export default function Hero({ heroWrapRef, activeStage, rotIndex, goStage }: He
               lineHeight: 1.95,
             }}
           >
-            <div>EST. 2019</div>
+            <div style={{ marginBottom: 4 }}>EST. 2019</div>
+            <ClutchWidget />
           </div>
 
           <div
