@@ -151,3 +151,45 @@ a:hover .viewCaseArrow {
   transform: translateY(-2px);
   background: #0FA882 !important;
 }
+
+
+/* Responsive Nav Styling */
+@media (max-width: 1024px) {
+  .navLinksContainer {
+    gap: 0 !important;
+  }
+  .navLinkItem {
+    padding: 8px 10px !important;
+    font-size: 11px !important;
+  }
+  .navCta {
+    padding: 8px 8px 8px 12px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .navLogoText {
+    display: none !important;
+  }
+  .linkNum {
+    display: none !important;
+  }
+  .navCtaText {
+    display: none !important;
+  }
+  .navCta {
+    padding: 4px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .navLinkItem {
+    padding: 6px 8px !important;
+    font-size: 10px !important;
+  }
+  .navBarContainer {
+    padding: 6px 10px !important;
+    width: 90% !important;
+  }
+}
+

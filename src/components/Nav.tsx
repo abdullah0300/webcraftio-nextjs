@@ -88,6 +88,7 @@ export default function Nav({ scrolled, navDocked, activeNav, navBarRef, navFill
     >
       <div
         ref={navBarRef}
+        className="navBarContainer"
         style={{
           pointerEvents: "auto",
           position: "relative",
@@ -153,6 +154,7 @@ export default function Nav({ scrolled, navDocked, activeNav, navBarRef, navFill
             }}
           />
           <span
+            className="navLogoText"
             style={{
               fontWeight: 700,
               fontSize: 18,
@@ -166,6 +168,7 @@ export default function Nav({ scrolled, navDocked, activeNav, navBarRef, navFill
 
         <div
           ref={navLinksRef}
+          className="navLinksContainer"
           onMouseLeave={onNavLeave}
           style={{
             position: "relative",
@@ -196,6 +199,7 @@ export default function Nav({ scrolled, navDocked, activeNav, navBarRef, navFill
             <a
               key={link.href}
               data-navlink=""
+              className="navLinkItem"
               onMouseEnter={onNavEnter}
               href={link.href}
               style={{
@@ -211,7 +215,7 @@ export default function Nav({ scrolled, navDocked, activeNav, navBarRef, navFill
                 color: "#41463F",
               }}
             >
-              <span style={{ fontSize: 9, color: "#9FB8AD" }}>{link.num}</span>
+              <span className="linkNum" style={{ fontSize: 9, color: "#9FB8AD" }}>{link.num}</span>
               {link.label}
             </a>
           ))}
@@ -237,7 +241,7 @@ export default function Nav({ scrolled, navDocked, activeNav, navBarRef, navFill
               "transform .25s cubic-bezier(.2,1.4,.4,1), box-shadow .3s, background .3s, padding .4s ease",
           }}
         >
-          <span style={{ display: navCtaLabelDisplay }}>Start a project</span>{" "}
+          <span className="navCtaText" style={{ display: navCtaLabelDisplay }}>Start a project</span>{" "}
           <span
             style={{
               width: navCtaArrowSize,
