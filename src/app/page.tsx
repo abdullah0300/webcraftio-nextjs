@@ -195,7 +195,7 @@ export default function Home() {
       <Nav scrolled={scrolled} navDocked={navDocked} activeNav={activeNav} navBarRef={navBarRef} navFillRef={navFillRef} />
       <Hero heroWrapRef={heroWrapRef} activeStage={activeStage} rotIndex={rotIndex} goStage={goStage} />
       <Marquee />
-      <Work
+      {/* <Work
         workWrapRef={workWrapRef}
         card1Ref={card1Ref}
         card2Ref={card2Ref}
@@ -205,7 +205,7 @@ export default function Home() {
         toggleCard1={toggleCard1}
         toggleCard2={toggleCard2}
         closeCard={closeCard}
-      />
+      /> */}
       <Services activeService={activeService} setActiveService={setActiveService} clearService={clearService} />
       <Process procWrapRef={procWrapRef} procTrackRef={procTrackRef} procFillRef={procFillRef} procNum={procNum} />
       <CTA intent={intent} setIntent={setIntent} />
