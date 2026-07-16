@@ -12,6 +12,7 @@ export default function CTA({ intent, setIntent }: CTAProps) {
   return (
     <section id="start" data-screen-label="CTA" style={{ padding: "clamp(60px,7vw,100px) 24px", display: "flex", justifyContent: "center" }}>
       <div
+        className="ctaCard"
         style={{
           position: "relative",
           overflow: "hidden",
@@ -26,7 +27,7 @@ export default function CTA({ intent, setIntent }: CTAProps) {
           alignItems: "center",
         }}
       >
-        <div style={{ position: "absolute", top: -90, right: "30%", width: 300, height: 300, zIndex: 0, opacity: 0.4, pointerEvents: "none" }}>
+        <div className="ctaBlob ctaBlobA" style={{ position: "absolute", top: -90, right: "30%", width: 300, height: 300, zIndex: 0, opacity: 0.4, pointerEvents: "none" }}>
           <div
             style={{
               width: "100%",
@@ -37,7 +38,7 @@ export default function CTA({ intent, setIntent }: CTAProps) {
             }}
           />
         </div>
-        <div style={{ position: "absolute", bottom: -90, left: -50, width: 240, height: 240, zIndex: 0, opacity: 0.4, pointerEvents: "none" }}>
+        <div className="ctaBlob ctaBlobB" style={{ position: "absolute", bottom: -90, left: -50, width: 240, height: 240, zIndex: 0, opacity: 0.4, pointerEvents: "none" }}>
           <div
             style={{
               width: "100%",
@@ -49,7 +50,7 @@ export default function CTA({ intent, setIntent }: CTAProps) {
           />
         </div>
 
-        <div style={{ position: "relative", zIndex: 2 }}>
+        <div className="ctaCopy" style={{ position: "relative", zIndex: 2 }}>
           <div
             style={{
               display: "inline-flex",
@@ -90,6 +91,7 @@ export default function CTA({ intent, setIntent }: CTAProps) {
         </div>
 
         <div
+          className="ctaForm"
           style={{
             position: "relative",
             zIndex: 2,
@@ -130,7 +132,7 @@ export default function CTA({ intent, setIntent }: CTAProps) {
             Let&rsquo;s make <strong style={{ color: "#0A6B53" }}>{intentText}</strong>. Drop your email — we&rsquo;ll reply
             within a day. No forms, no pitch.
           </p>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#fff", border: "1px solid #C6EFDC", borderRadius: 999, padding: "6px 6px 6px 18px", marginTop: 18 }}>
+          <div className="ctaEmailRow" style={{ display: "flex", alignItems: "center", gap: 8, background: "#fff", border: "1px solid #C6EFDC", borderRadius: 999, padding: "6px 6px 6px 18px", marginTop: 18 }}>
             <input
               type="email"
               placeholder="you@company.com"

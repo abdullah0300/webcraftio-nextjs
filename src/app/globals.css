@@ -28,6 +28,10 @@ button {
   font-family: inherit;
 }
 
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+
 @keyframes floaty {
   0%, 100% { transform: translate(0, 0) scale(1); }
   33% { transform: translate(40px, -32px) scale(1.1); }
@@ -81,7 +85,9 @@ button {
   40% { transform: rotate(11deg); }
 }
 
-/* ---------- Hover effects (mirrors original style-hover bindings) ---------- */
+/* ============================================================
+   HOVER EFFECTS (mirrors original style-hover bindings)
+   ============================================================ */
 
 .navCta:hover {
   transform: translateY(-2px) scale(1.04);
@@ -152,8 +158,576 @@ a:hover .viewCaseArrow {
   background: #0FA882 !important;
 }
 
+/* ============================================================
+   PROCESS — "How we work"
+   Pinned section with a scroll-driven horizontal track.
+   The pin + track behave identically at every screen size;
+   only the layout inside each step reflows.
+   ============================================================ */
 
-/* Responsive Nav Styling */
+.processSection {
+  --proc-steps: 5;
+  --proc-ink: #15181A;
+  --proc-body: #5C635E;
+  --proc-muted: #8A918B;
+  --proc-mint: #0FA882;
+  --proc-mint-soft: #9FF3D8;
+  --proc-pad-x: clamp(20px, 5vw, 64px);
+  position: relative;
+}
+
+/* Scroll runway. Driven by step count so the JS progress math
+   (scrollTop / (wrap.offsetHeight - innerHeight)) needs no changes. */
+.processWrap {
+  position: relative;
+  height: calc(var(--proc-steps) * 100vh);
+}
+
+.processStickyContent {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Small-viewport unit: prevents the jump when mobile browser chrome
+   collapses mid-scroll. Falls back to vh where unsupported. */
+@supports (height: 100svh) {
+  .processWrap {
+    height: calc(var(--proc-steps) * 100svh);
+  }
+  .processStickyContent {
+    height: 100svh;
+  }
+}
+
+/* Vertical gestures stay with the page so the pin can drive the
+   track; horizontal swipes are ignored on purpose. */
+.processStickyContent,
+.processTrack {
+  touch-action: pan-y;
+}
+
+/* ---------- Chrome: progress bar, eyebrow, counter, hint ---------- */
+
+.processProgress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 8;
+  height: 5px;
+  background: #E7ECE7;
+}
+
+.processProgressFill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--proc-mint-soft), var(--proc-mint));
+  transition: width 0.08s linear;
+}
+
+.processEyebrow {
+  position: absolute;
+  top: 38px;
+  left: var(--proc-pad-x);
+  z-index: 7;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--proc-muted);
+}
+
+.processCounter {
+  position: absolute;
+  top: 34px;
+  right: var(--proc-pad-x);
+  z-index: 7;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--proc-ink);
+}
+
+.processCounter span {
+  color: #C7CFC7;
+}
+
+/* Per-card counter is mobile-only; hidden on desktop where the global
+   scroll-driven .processCounter is used instead. */
+.processStepCounter {
+  display: none;
+}
+
+.processScrollHint {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 7;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--proc-muted);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  pointer-events: none;
+}
+
+.processScrollHint span {
+  font-size: 14px;
+  color: var(--proc-mint);
+}
+
+/* ---------- Track ---------- */
+
+.processTrack {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  will-change: transform;
+}
+
+.processStepContainer {
+  flex: none;
+  width: 100vw;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  overflow: hidden;
+}
+
+.processStepContainer--light { background: #FAFBF8; }
+.processStepContainer--mint  { background: #EFF8F3; }
+
+/* ---------- Step: text column ---------- */
+
+.processStepText {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(14px, 1.8vw, 24px);
+  padding: clamp(70px, 8vw, 130px) clamp(32px, 6vw, 96px);
+}
+
+.processStepWatermark {
+  position: absolute;
+  top: 6%;
+  left: clamp(20px, 5vw, 80px);
+  z-index: 0;
+  font-weight: 700;
+  font-size: clamp(150px, 24vw, 400px);
+  line-height: 0.7;
+  color: #EBF4ED;
+  letter-spacing: -0.05em;
+  pointer-events: none;
+}
+
+.processStepInner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.8vw, 24px);
+}
+
+.processStepEyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 13px;
+  color: var(--proc-mint);
+  letter-spacing: 0.06em;
+}
+
+.processStepRule {
+  width: 30px;
+  height: 1px;
+  background: var(--proc-mint);
+  flex: none;
+}
+
+.processStepText h3 {
+  font-size: clamp(46px, 6.4vw, 104px);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  font-weight: 700;
+  margin: 0;
+  color: var(--proc-ink);
+}
+
+.processStepText p {
+  max-width: 430px;
+  font-size: clamp(15px, 1.3vw, 19px);
+  color: var(--proc-body);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.processStepChecklist {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin-top: 6px;
+}
+
+.processStepCheckItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: #2F3A35;
+}
+
+.processStepCheckIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #E9FBF4;
+  color: var(--proc-mint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex: none;
+}
+
+/* ---------- Step: visual column ---------- */
+
+.processStepVisual {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(120% 100% at var(--proc-gradient-pos), #DFFBF1, #9FF3D8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(30px, 4vw, 72px);
+}
+
+.processStepDecor {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 300px;
+  height: 300px;
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.processStepBlob {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #FFFFFF, #A8F5DC);
+  animation: morph 12s ease-in-out infinite, spinSlow 34s linear infinite;
+  border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+}
+
+/* ---------- Visual cards ---------- */
+
+.procVisualCard {
+  position: relative;
+  z-index: 2;
+  width: min(86%, 400px);
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 44px 90px -34px rgba(20, 70, 54, 0.5);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: float3 7s ease-in-out infinite;
+}
+
+.procVisualCard--dark,
+.procVisualCard--code {
+  background: var(--proc-ink);
+  box-shadow: 0 44px 90px -34px rgba(20, 40, 33, 0.55);
+}
+
+.procVisualCard--code {
+  width: min(88%, 420px);
+  padding: 20px;
+  gap: 9px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 13px;
+}
+
+.procCardLabel {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: var(--proc-muted);
+  letter-spacing: 0.06em;
+}
+
+.procCardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.procCardTitle {
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+}
+
+.procPill {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  color: var(--proc-mint);
+  background: #E9FBF4;
+  padding: 4px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.procPill--live {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.procLiveDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #15C79A;
+  display: inline-block;
+}
+
+/* Discover */
+.procQuestionRow {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: #F5FAF8;
+  border-radius: 13px;
+  padding: 12px 14px;
+}
+
+.procQuestionIcon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #E9FBF4;
+  color: var(--proc-mint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex: none;
+}
+
+.procQuestionText {
+  font-size: 13.5px;
+  color: #41463F;
+}
+
+.procTagRow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 2px;
+}
+
+.procTag {
+  background: var(--proc-ink);
+  color: #fff;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  padding: 8px 14px;
+  border-radius: 999px;
+}
+
+/* Design */
+.procSwatchRow {
+  display: flex;
+  gap: 8px;
+}
+
+.procSwatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  flex: none;
+}
+
+.procSwatch--mint { background: #6FE7C0; }
+.procSwatch--ink  { background: var(--proc-ink); }
+.procSwatch--pale { background: #E9FBF4; border: 1px solid #C6EFDC; }
+
+.procSwatchLabel {
+  margin-left: auto;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: var(--proc-muted);
+  align-self: center;
+}
+
+.procWireRow {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.procWireCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.procBar {
+  height: 13px;
+  border-radius: 5px;
+}
+
+.procBar--ink  { background: var(--proc-ink); }
+.procBar--grey { height: 8px; border-radius: 4px; background: #D7DDD7; }
+
+.procWirePill {
+  width: 88px;
+  height: 28px;
+  border-radius: 999px;
+  background: #6FE7C0;
+  margin-top: 6px;
+}
+
+.procWireOrb {
+  width: 96px;
+  height: 96px;
+  border-radius: 16px;
+  background: radial-gradient(circle at 32% 30%, #A8F5DC, #6FE7C0);
+  flex: none;
+}
+
+/* Development */
+.procCodeChrome {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #2A322E;
+}
+
+.procDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.procDot--red   { background: #FF7A7A; }
+.procDot--amber { background: #FFD36A; }
+.procDot--mint  { background: #6FE7C0; }
+
+.procCodeFile {
+  margin-left: 6px;
+  color: var(--proc-muted);
+  font-size: 11px;
+}
+
+.procCodeCheck {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cKey   { color: #6FE7C0; }
+.cWhite { color: #fff; }
+.cMuted { color: var(--proc-muted); }
+.cFn    { color: #9FF3D8; }
+.cArg   { color: #FFD36A; }
+
+/* Launch */
+.procDeployTrack {
+  height: 10px;
+  border-radius: 999px;
+  background: #EEF3F0;
+  overflow: hidden;
+}
+
+.procDeployFill {
+  width: 88%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--proc-mint-soft), var(--proc-mint));
+}
+
+.procStatRow {
+  display: flex;
+  gap: 10px;
+}
+
+.procStat {
+  flex: 1;
+  background: #F5FAF8;
+  border-radius: 12px;
+  padding: 11px;
+  min-width: 0;
+}
+
+.procStatLabel {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 9px;
+  color: #7E867F;
+}
+
+.procStatValue {
+  font-weight: 700;
+  font-size: 14px;
+  margin-top: 2px;
+  color: var(--proc-mint);
+}
+
+/* Support */
+.procBarChart {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  height: 54px;
+}
+
+.procChartBar {
+  flex: 1;
+  background: #9FF3D8;
+  border-radius: 4px;
+}
+
+.procChartBar--strong {
+  background: var(--proc-mint);
+}
+
+.procChat {
+  font-size: 13px;
+  padding: 10px 13px;
+  max-width: 92%;
+}
+
+.procChat--them {
+  align-self: flex-start;
+  background: #F1F4F2;
+  color: #41463F;
+  border-radius: 13px 13px 13px 3px;
+}
+
+.procChat--us {
+  align-self: flex-end;
+  background: #6FE7C0;
+  color: #0A2A22;
+  border-radius: 13px 13px 3px 13px;
+}
+
+/* ============================================================
+   RESPONSIVE — NAV
+   ============================================================ */
+
 @media (max-width: 1024px) {
   .navLinksContainer {
     gap: 0 !important;
@@ -174,28 +748,359 @@ a:hover .viewCaseArrow {
   .linkNum {
     display: none !important;
   }
-  .navCtaText {
+  /* Drop the CTA button on phones — it overflows the pill and duplicates
+     the About link (both target #start). Links stay as the mobile nav. */
+  .navCta {
     display: none !important;
   }
-  .navCta {
-    padding: 4px !important;
+  /* Reclaim horizontal room on phones — the 20px each-side wrapper padding
+     is a big chunk of a 360px screen and was pushing the pill off-edge. */
+  .navRoot {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  /* Let the pill hug its content (logo + links) and center under the fixed
+     <nav>, instead of stretching full-width and leaving a gap where the CTA
+     used to sit. max-width keeps it inside the viewport on tiny screens. */
+  .navBarContainer {
+    width: max-content !important;
+    max-width: 100% !important;
+    /* Center logo + links as a group. Overrides the inline
+       `space-between`, which otherwise flings them to opposite edges the
+       moment the pill grows to full width on a narrow device. */
+    justify-content: center !important;
+    gap: 6px !important;
+    padding: 8px 10px !important;
+  }
+  .navLinksContainer {
+    gap: 0 !important;
+  }
+  .navLinkItem {
+    padding: 8px 9px !important;
+    font-size: 11px !important;
   }
 }
 
 @media (max-width: 480px) {
-  .navLinkItem {
-    padding: 6px 8px !important;
-    font-size: 10px !important;
+  .navRoot {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
   }
   .navBarContainer {
-    padding: 6px 10px !important;
-    width: 90% !important;
+    gap: 4px !important;
+    padding: 7px 8px !important;
+  }
+  .navLinkItem {
+    padding: 7px 7px !important;
+    font-size: 10.5px !important;
+    letter-spacing: -0.01em !important;
   }
 }
 
+@media (max-width: 360px) {
+  .navLinkItem {
+    padding: 6px 6px !important;
+    font-size: 10px !important;
+  }
+}
 
+/* ============================================================
+   RESPONSIVE — PROCESS (pin + track unchanged, panels reflow)
+   ============================================================ */
 
-/* Hero Responsive Styling */
+/* Tablet — tighten the split, shrink the watermark */
+@media (max-width: 1024px) {
+  .processStepContainer {
+    grid-template-columns: 1fr 0.9fr;
+  }
+
+  .processStepText {
+    padding: clamp(80px, 9vw, 110px) clamp(28px, 4.5vw, 56px) 60px;
+  }
+
+  .processStepWatermark {
+    font-size: clamp(120px, 20vw, 240px);
+    opacity: 0.7;
+  }
+
+  .processStepText h3 {
+    font-size: clamp(40px, 6vw, 64px);
+  }
+
+  .procVisualCard {
+    width: min(94%, 340px);
+    padding: 18px;
+    gap: 12px;
+  }
+
+  .procVisualCard--code {
+    width: min(94%, 340px);
+  }
+}
+
+/* Phone — Carousel/Swiper Layout */
+@media (max-width: 768px) {
+  .processSection {
+    --proc-pad-x: 20px;
+  }
+
+  .processWrap {
+    height: auto !important;
+  }
+
+  .processStickyContent {
+    position: relative !important;
+    height: auto !important;
+    top: auto !important;
+    overflow: visible !important;
+    /* Release the desktop `pan-y` lock — an ancestor set to pan-y blocks the
+       carousel's horizontal touch-scroll no matter what the track declares. */
+    touch-action: auto;
+  }
+
+  /* Native CSS scroll-snap carousel — one step per swipe, real momentum.
+     No JS transform is written to this element at this width (the parent
+     bails out), so nothing fights the scroll position. */
+  .processTrack {
+    display: flex;
+    width: 100%;
+    height: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Horizontal swipes scroll the carousel; vertical falls through to the
+       page. Override the desktop `pan-y` that would block horizontal drag. */
+    touch-action: auto;
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .processTrack::-webkit-scrollbar {
+    display: none;
+  }
+
+  .processStepContainer {
+    position: relative;
+    flex: 0 0 100%;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+    background: inherit;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  /* Each card's own number — top-right, aligned where the global counter sat.
+     Swiping to a card shows that card's number; no JS sync involved. */
+  .processStepCounter {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 7;
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--proc-ink);
+  }
+
+  .processStepCounter span {
+    color: #C7CFC7;
+  }
+
+  .processStepContainer--light { background: #FAFBF8; }
+  .processStepContainer--mint  { background: #EFF8F3; }
+
+  .processStepText {
+    padding: 60px 20px 40px;
+    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .processStepInner {
+    gap: 12px;
+  }
+
+  .processStepWatermark {
+    display: none;
+  }
+
+  .processStepEyebrow {
+    font-size: 11px;
+  }
+
+  .processStepRule {
+    width: 20px;
+  }
+
+  .processStepText h3 {
+    font-size: 32px;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  .processStepText p {
+    font-size: 15px;
+    line-height: 1.5;
+    max-width: none;
+    margin: 0;
+  }
+
+  .processStepChecklist {
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .processStepCheckItem {
+    font-size: 14px;
+    gap: 10px;
+  }
+
+  .processStepCheckIcon {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
+
+  .processStepVisual {
+    flex: 1;
+    background: inherit;
+    padding: 40px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+  }
+
+  .processStepDecor {
+    display: none;
+  }
+
+  .procVisualCard,
+  .procVisualCard--code {
+    width: min(90%, 340px);
+    max-height: 280px;
+    padding: 16px;
+    gap: 12px;
+    border-radius: 18px;
+    box-shadow: 0 20px 48px -20px rgba(20, 70, 54, 0.35);
+    animation: none !important;
+    overflow-y: auto;
+  }
+
+  .procQuestionRow { padding: 10px 12px; border-radius: 11px; }
+  .procQuestionText { font-size: 13px; }
+  .procWireOrb { width: 70px; height: 70px; flex-shrink: 0; }
+  .procBarChart { height: 45px; gap: 4px; }
+  .procChat { font-size: 13px; padding: 9px 12px; }
+  .procVisualCard--code { font-size: 12px; padding: 14px; }
+
+  .procCardLabel { font-size: 11px; }
+  .procCardTitle { font-size: 14px; }
+  .procPill { font-size: 10px; padding: 4px 9px; }
+  .procStatRow { gap: 9px; }
+  .procStat { padding: 10px; }
+  .procStatLabel { font-size: 9px; }
+  .procStatValue { font-size: 13px; }
+  .procCodeFile { font-size: 11px; }
+  .procCodeCheck { font-size: 12px; gap: 7px; }
+  .procWireCol { gap: 7px; }
+  .procBar { height: 12px; }
+  .procBar--grey { height: 7px; }
+
+  .processEyebrow {
+    top: 24px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  /* Global counter is replaced by the per-card counter on mobile */
+  .processCounter {
+    display: none;
+  }
+
+  /* Horizontal swipe replaces the vertical scroll cue */
+  .processScrollHint {
+    display: none;
+  }
+
+  /* The scroll-driven fill isn't updated at this width */
+  .processProgress {
+    display: none;
+  }
+}
+
+/* Small phones (carousel) */
+@media (max-width: 480px) {
+  .processStepText {
+    padding: 50px 16px 30px;
+  }
+
+  .processStepText h3 {
+    font-size: 28px;
+  }
+
+  .processStepVisual {
+    padding: 30px 16px;
+    min-height: 280px;
+  }
+
+  .procVisualCard,
+  .procVisualCard--code {
+    width: min(95%, 320px);
+    max-height: 260px;
+    padding: 14px;
+  }
+
+  .procStatRow { gap: 8px; }
+  .procStat { padding: 9px; }
+  .procWireOrb { width: 60px; height: 60px; }
+  .procBarChart { height: 40px; }
+
+  .processStepCounter {
+    top: 16px;
+    right: 16px;
+    font-size: 12px;
+  }
+}
+
+/* Landscape phones — adjust carousel spacing */
+@media (max-width: 768px) and (orientation: landscape) {
+  .processStepText {
+    padding: 40px 20px 20px;
+  }
+
+  .processStepVisual {
+    min-height: 250px;
+    padding: 30px 20px;
+  }
+
+  .processStepText h3 {
+    font-size: 26px;
+  }
+
+  .processStepText p {
+    font-size: 13px;
+  }
+
+  .procVisualCard,
+  .procVisualCard--code {
+    max-height: 220px;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — HERO
+   ============================================================ */
+
 @media (max-width: 1024px) {
   .heroRail {
     display: none !important;
@@ -203,27 +1108,65 @@ a:hover .viewCaseArrow {
 }
 
 @media (max-width: 768px) {
+  .heroContainer {
+    height: auto !important;
+    /* Clip the decorative ambient blobs (460px wide, left:-100) so they can't
+       push the page wider than the viewport and cause sideways scroll. */
+    overflow-x: clip !important;
+  }
+  .heroStickyContent {
+    position: relative !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
   .stagePanelGrid {
-    grid-template-columns: 1fr !important;
-    gap: 32px !important;
-  }
-  .stagePanelWrapper {
-    padding-top: 120px !important;
-    padding-bottom: 40px !important;
-    align-items: flex-start !important;
-  }
-  .stageVisualContainer {
-    min-height: 280px !important;
-    margin-top: 20px;
-  }
-  .heroStageZero {
     display: flex !important;
     flex-direction: column !important;
-    justify-content: center !important;
-    padding: 100px 24px 60px !important;
-    box-sizing: border-box !important;
+    gap: 40px !important;
   }
-  
+  .stageCopyContainer {
+    order: 1 !important;
+  }
+  .stageVisualContainer {
+    order: 2 !important;
+  }
+  .stageCornerNum {
+    display: none !important;
+  }
+  .stageCopyTitle {
+    font-size: 44px !important;
+    line-height: 1.05 !important;
+  }
+  .stagePanelWrapper {
+    position: relative !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    padding: 80px 24px !important;
+    align-items: flex-start !important;
+    min-height: auto !important;
+    border-bottom: 1px solid rgba(238, 243, 240, 0.6);
+  }
+  .stageVisualContainer {
+    min-height: auto !important;
+    padding: 20px 0;
+  }
+  .heroStageZero {
+    position: relative !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    /* Top-align and hug the content. Forcing 100vh + centering left a big
+       dead gap below the buttons before the next stacked stage. */
+    justify-content: flex-start !important;
+    padding: 100px 24px 48px !important;
+    box-sizing: border-box !important;
+    min-height: auto !important;
+    border-bottom: 1px solid rgba(238, 243, 240, 0.6);
+  }
+
   .heroStageZero > div:not(.heroBlob) {
     position: relative !important;
     top: auto !important;
@@ -235,28 +1178,322 @@ a:hover .viewCaseArrow {
 
   .heroIntroTag {
     align-self: flex-start !important;
-    margin-bottom: 24px !important;
+    margin-bottom: 16px !important;
   }
-  
+
   .heroWidget {
-    align-self: flex-end !important;
-    text-align: right !important;
-    margin-top: -30px !important;
-    margin-bottom: 50px !important;
-    transform: scale(0.85) !important;
-    transform-origin: right top !important;
+    align-self: flex-start !important;
+    text-align: left !important;
+    margin-top: 0 !important;
+    margin-bottom: 40px !important;
+    transform: scale(0.9) !important;
+    transform-origin: left top !important;
   }
-  
+
+  .heroBlob {
+    position: absolute !important;
+    top: 40% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 340px !important;
+    height: 340px !important;
+  }
+
   .heroTitleContainer {
-    margin-bottom: 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    margin-bottom: 40px !important;
   }
-  
+
+  /* "WE BUILD" is a non-wrapping flex row of characters (KineticText), so a
+     fixed 64px overflowed narrow phones. Scale with the viewport instead, with
+     a floor small enough to fit ~320px screens. */
+  .heroTitleContainer > div:first-child {
+    font-size: clamp(38px, 13.5vw, 60px) !important;
+    line-height: 0.9 !important;
+  }
+
+  /* Rotating word line ("SAAS PLATFORMS" is the widest) — scale it down too. */
+  .heroTitleContainer > div:last-child {
+    font-size: clamp(26px, 9.2vw, 40px) !important;
+    margin-top: 0 !important;
+  }
+
+  .heroTitleContainer span[style*="font-size: .5em"] {
+    display: none !important;
+  }
+
   .heroIntroDesc {
     margin-bottom: 0 !important;
   }
-  
+
+  .heroIntroDesc .liftBtn,
+  .heroIntroDesc .liftBtnOutline {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
   .heroScrollBadge {
+    display: none !important;
+  }
+
+  /* Hide the ambient decorative blob on mobile */
+  .stageAmbientBlob {
+    display: none !important;
+  }
+
+  /* Let mockups use their natural inline sizing */
+  [data-mock] {
+    box-sizing: border-box !important;
+    margin: 0 auto;
+  }
+
+  .mockBubble {
+    max-width: 96% !important;
+  }
+
+  .mockHeaderRow, .mockFooterRow {
+    flex-wrap: wrap !important;
+  }
+
+  .stageVisualContainer {
+    min-height: auto !important;
+    padding: 20px 0 !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .stagePanelWrapper {
+    padding: 60px 16px !important;
+  }
+  .heroStageZero {
+    padding: 88px 16px 40px !important;
+  }
+
+  .mockBubble {
+    max-width: 98% !important;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — WORK
+   ============================================================ */
+
+@media (max-width: 768px) {
+  #work {
+    overflow: hidden !important;
+  }
+
+  .workScrollContainer {
+    height: auto !important;
+  }
+
+  .workStickyContent {
+    position: relative !important;
+    top: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 32px !important;
+    padding: 20px 24px 80px !important;
+  }
+
+  .workSelectedLabel,
+  .workIndicator,
+  .workScrollIndicator {
+    display: none !important;
+  }
+
+  .workCardWrapper {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    pointer-events: auto !important;
+  }
+
+  .projectCardContainer {
+    transform: none !important; /* Neutralize JS scroll translateY */
+    height: auto !important;
+  }
+
+  .projectCardGrid {
+    position: relative !important;
+    inset: auto !important;
+    height: auto !important;
+  }
+
+  .projectCardText {
+    padding: 40px 28px !important;
+  }
+
+  .projectCardWatermark {
+    font-size: 140px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .workStickyContent {
+    padding: 10px 16px 60px !important;
+    gap: 20px !important;
+  }
+
+  .projectCardContainer {
+    border-radius: 24px !important;
+  }
+
+  .projectCardText {
+    padding: 30px 18px !important;
+  }
+
+  .projectCardWatermark {
+    font-size: 110px !important;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — SERVICES (carousel on small screens)
+   ============================================================ */
+
+@media (max-width: 768px) {
+  #services {
+    padding: 80px 0 !important;
+    overflow: hidden !important;
+  }
+
+  #services > div {
+    max-width: 100% !important;
+  }
+
+  #services > div > div:first-child {
+    padding: 0 24px !important;
+  }
+
+  .servicesGrid {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 16px !important;
+    padding: 20px 24px 40px !important;
+    scrollbar-width: none !important;
+  }
+
+  .servicesGrid::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .serviceCard {
+    flex: 0 0 290px !important;
+    scroll-snap-align: center !important;
+    height: auto !important;
+    min-height: 440px !important;
+  }
+
+  .serviceCardDetails {
+    opacity: 1 !important;
+    display: block !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #services {
+    padding: 60px 0 !important;
+  }
+
+  #services > div > div:first-child {
+    padding: 0 16px !important;
+  }
+
+  .servicesGrid {
+    padding: 10px 16px 30px !important;
+    gap: 12px !important;
+  }
+
+  .serviceCard {
+    flex: 0 0 270px !important;
+    padding: 20px !important;
+    min-height: 410px !important;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — CTA ("hey, we're WebCraftio")
+   Two-column card collapses to a single stacked column.
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .ctaCard {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+
+  /* Decorative blobs only clutter the tighter stacked layout */
+  .ctaBlobA {
+    right: -40px !important;
+    width: 220px !important;
+    height: 220px !important;
+  }
+
+  .ctaBlobB {
     display: none !important;
   }
 }
 
+@media (max-width: 480px) {
+  .ctaCard {
+    border-radius: 26px !important;
+    gap: 26px !important;
+  }
+
+  .ctaForm {
+    border-radius: 20px !important;
+  }
+
+  /* Stack the email field and button so nothing overflows the pill */
+  .ctaEmailRow {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    border-radius: 20px !important;
+    padding: 14px !important;
+  }
+
+  .ctaEmailRow input {
+    text-align: center;
+  }
+
+  .ctaEmailRow .ctaEmailBtn {
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .ctaBlobA {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   ACCESSIBILITY FLOOR
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .processStepBlob,
+  .procVisualCard,
+  .procVisualCard--code {
+    animation: none !important;
+  }
+
+  .processProgressFill {
+    transition: none;
+  }
+}

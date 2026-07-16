@@ -74,6 +74,7 @@ export default function Nav({ scrolled, navDocked, activeNav, navBarRef, navFill
 
   return (
     <nav
+      className="navRoot"
       style={{
         position: "fixed",
         top: 0,

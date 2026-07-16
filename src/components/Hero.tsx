@@ -27,6 +27,8 @@ export default function Hero({ heroWrapRef, activeStage, rotIndex, goStage }: He
   const kineticRef = useRef<HTMLDivElement>(null);
 
   const heroMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return;
+    
     const root = e.currentTarget;
     const r = root.getBoundingClientRect();
     const mx = e.clientX - r.left;
@@ -88,11 +90,13 @@ export default function Hero({ heroWrapRef, activeStage, rotIndex, goStage }: He
     <header
       id="top"
       ref={heroWrapRef}
+      className="heroContainer"
       data-screen-label="Hero"
       style={{ position: "relative", height: "520vh" }}
     >
       <div
         ref={heroStageRef}
+        className="heroStickyContent"
         onMouseMove={heroMove}
         style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden" }}
       >
@@ -605,7 +609,7 @@ function StageCopy({
   tags: string[];
 }) {
   return (
-    <div style={{ position: "relative", zIndex: 2 }}>
+    <div className="stageCopyContainer" style={{ position: "relative", zIndex: 2 }}>
       <div
         style={{
           display: "flex",
@@ -643,6 +647,7 @@ function StageCopy({
         />
       </div>
       <h2
+        className="stageCopyTitle"
         style={{
           fontSize: "clamp(34px,5.2vw,66px)",
           letterSpacing: "-.035em",
@@ -715,6 +720,7 @@ function StageVisual({
       }}
     >
       <span
+        className="stageCornerNum"
         style={{
           position: "absolute",
           ...(cornerSide === "left" ? { left: -14 } : { right: -14 }),
@@ -732,6 +738,7 @@ function StageVisual({
         {cornerNum}
       </span>
       <div
+        className="stageAmbientBlob"
         style={{
           position: "absolute",
           top: "6%",
@@ -762,6 +769,7 @@ function AgentChatMock() {
   return (
     <div
       data-mock=""
+      className="mockContainer"
       style={{
         position: "relative",
         zIndex: 2,
@@ -778,6 +786,7 @@ function AgentChatMock() {
       }}
     >
       <div
+        className="mockHeaderRow"
         style={{
           display: "flex",
           alignItems: "center",
@@ -789,10 +798,11 @@ function AgentChatMock() {
         <Dot color="#FF7A7A" />
         <Dot color="#FFD36A" />
         <Dot color="#6FE7C0" />
-        <span style={{ marginLeft: 6, fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 12, color: "#41463F" }}>
+        <span className="mockHeaderTitle" style={{ marginLeft: 6, fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 12, color: "#41463F" }}>
           northwind · agent
         </span>
         <span
+          className="mockHeaderBadge"
           style={{
             marginLeft: "auto",
             display: "flex",
@@ -816,8 +826,9 @@ function AgentChatMock() {
       <Bubble align="end" bg="#6FE7C0" color="#0A2A22">
         Found it — expired token. Reissued &amp; retried the charge.
       </Bubble>
-      <div style={{ display: "flex", alignItems: "center", gap: 9, marginTop: 2 }}>
+      <div className="mockFooterRow" style={{ display: "flex", alignItems: "center", gap: 9, marginTop: 2 }}>
         <span
+          className="mockFooterPill"
           style={{
             background: "#15181A",
             color: "#fff",
@@ -829,7 +840,7 @@ function AgentChatMock() {
         >
           Resolved in 1.4s
         </span>
-        <span style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 11, color: "#7E867F" }}>
+        <span className="mockFooterText" style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 11, color: "#7E867F" }}>
           98% auto-resolved
         </span>
       </div>
@@ -843,6 +854,7 @@ function SaasDashboardMock() {
   return (
     <div
       data-mock=""
+      className="mockContainer mockSaasContainer"
       style={{
         position: "relative",
         zIndex: 2,
@@ -858,7 +870,7 @@ function SaasDashboardMock() {
         animation: "float3 7.6s ease-in-out infinite",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div className="mockHeaderRow" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span style={{ fontWeight: 700, fontSize: 16, letterSpacing: "-.01em" }}>Ledgerly · Overview</span>
         <span
           style={{
@@ -873,7 +885,7 @@ function SaasDashboardMock() {
           ↑ live
         </span>
       </div>
-      <div style={{ display: "flex", gap: 10 }}>
+      <div className="mockStatGrid" style={{ display: "flex", gap: 10 }}>
         <StatBox label="MRR" value="$1.2M" />
         <StatBox label="SEATS" value="30,412" />
         <StatBox label="CHURN" value="1.1%" color="#0FA882" />
@@ -1083,9 +1095,9 @@ function Dot({ color }: { color: string }) {
 
 function StatBox({ label, value, color }: { label: string; value: string; color?: string }) {
   return (
-    <div style={{ flex: 1, background: "#F5FAF8", borderRadius: 14, padding: 12 }}>
-      <div style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, color: "#7E867F" }}>{label}</div>
-      <div style={{ fontWeight: 700, fontSize: 20, marginTop: 3, color }}>{value}</div>
+    <div className="mockStatBox" style={{ flex: 1, background: "#F5FAF8", borderRadius: 14, padding: 12 }}>
+      <div className="mockStatLabel" style={{ fontFamily: "var(--font-jetbrains-mono), monospace", fontSize: 10, color: "#7E867F" }}>{label}</div>
+      <div className="mockStatValue" style={{ fontWeight: 700, fontSize: 20, marginTop: 3, color }}>{value}</div>
     </div>
   );
 }
@@ -1103,6 +1115,7 @@ function Bubble({
 }) {
   return (
     <div
+      className="mockBubble"
       style={{
         alignSelf: `flex-${align}`,
         maxWidth: "84%",

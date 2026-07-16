@@ -153,9 +153,10 @@ export default function Work({
         </div>
       </div>
 
-      <div ref={workWrapRef} style={{ position: "relative", height: "320vh" }}>
-        <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden" }}>
+      <div ref={workWrapRef} className="workScrollContainer" style={{ position: "relative", height: "320vh" }}>
+        <div className="workStickyContent" style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden" }}>
           <div
+            className="workSelectedLabel"
             style={{
               position: "absolute",
               top: 92,
@@ -170,6 +171,7 @@ export default function Work({
             SELECTED WORK
           </div>
           <div
+            className="workIndicator"
             style={{
               position: "absolute",
               top: "50%",
@@ -190,6 +192,7 @@ export default function Work({
             <span style={{ color: projC1, transition: "color .45s" }}>02</span>
           </div>
           <div
+            className="workScrollIndicator"
             style={{
               position: "absolute",
               bottom: 32,
@@ -212,6 +215,7 @@ export default function Work({
 
           {/* Card 2 layer (SmartCFO) sits behind, z-index 1 */}
           <div
+            className="workCardWrapper workCard2Wrapper"
             style={{
               position: "absolute",
               inset: 0,
@@ -258,6 +262,7 @@ export default function Work({
 
           {/* Card 1 layer (Northwind AI) sits in front, z-index 2; slides up on scroll */}
           <div
+            className="workCardWrapper workCard1Wrapper"
             style={{
               position: "absolute",
               inset: 0,
@@ -371,6 +376,7 @@ function ProjectCard({
   return (
     <div
       ref={cardRef}
+      className="projectCardContainer"
       onMouseEnter={onProjEnter}
       onMouseLeave={onProjLeave}
       style={{
@@ -384,8 +390,9 @@ function ProjectCard({
         boxShadow: "0 40px 90px -42px rgba(20,70,54,.35)",
       }}
     >
-      <div style={{ position: "absolute", inset: 0, zIndex: 1, display: "grid", gridTemplateColumns: detailCols, background: "#fff" }}>
+      <div className="projectCardGrid" style={{ position: "absolute", inset: 0, zIndex: 1, display: "grid", gridTemplateColumns: detailCols, background: "#fff" }}>
         <div
+          className="projectCardText"
           style={{
             position: "relative",
             zIndex: 2,
@@ -653,6 +660,7 @@ function FlipHalf({
           }}
         >
           <span
+            className="projectCardWatermark"
             style={{
               position: "absolute",
               top: "-5%",

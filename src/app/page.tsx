@@ -73,6 +73,16 @@ export default function Home() {
     (commit: boolean) => {
       const w = procWrapRef.current;
       if (!w) return;
+      // On mobile the Process section is a CSS scroll-snap carousel that
+      // owns its own layout. Bail out so we don't fight it — and clear any
+      // inline transform/width left over from a desktop-width render.
+      if (window.innerWidth <= 768) {
+        const track = procTrackRef.current;
+        if (track) track.style.transform = "";
+        const fill = procFillRef.current;
+        if (fill) fill.style.width = "";
+        return;
+      }
       const steps = 5;
       const total = w.offsetHeight - window.innerHeight;
       const top = w.getBoundingClientRect().top;

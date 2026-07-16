@@ -137,6 +137,7 @@ export default function Services({ activeService, setActiveService, clearService
 
         <div
           onMouseLeave={clearService}
+          className="servicesGrid"
           style={{ display: "grid", gridTemplateColumns: cols, gap: 14, transition: "grid-template-columns .55s cubic-bezier(.22,.7,.2,1)" }}
         >
           {SERVICES.map((svc, i) => (
@@ -190,7 +191,7 @@ export default function Services({ activeService, setActiveService, clearService
                     </span>
                   ))}
                 </div>
-                <div style={{ opacity: activeService === i ? 1 : 0, transition: "opacity .45s ease", marginTop: 16 }}>
+                <div className="serviceCardDetails" style={{ opacity: activeService === i ? 1 : 0, transition: "opacity .45s ease", marginTop: 16 }}>
                   <p style={{ fontSize: 14, color: "#5C635E", lineHeight: 1.55, margin: "0 0 14px", maxWidth: 300 }}>{svc.description}</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                     {svc.bullets.map((b) => (
