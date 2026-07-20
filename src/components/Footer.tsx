@@ -4,6 +4,7 @@ import { useCallback } from "react";
 
 interface FooterProps {
   footRef: React.RefObject<HTMLDivElement | null>;
+  footerRef?: React.RefObject<HTMLElement | null>;
   year: number;
 }
 
@@ -20,7 +21,7 @@ const CONNECT_LINKS = [
   { label: "Dribbble", href: "#" },
 ];
 
-export default function Footer({ footRef, year }: FooterProps) {
+export default function Footer({ footRef, footerRef, year }: FooterProps) {
   const footMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       const k = footRef.current;
@@ -65,6 +66,7 @@ export default function Footer({ footRef, year }: FooterProps) {
 
   return (
     <footer
+      ref={footerRef as React.RefObject<HTMLElement>}
       style={{
         position: "relative",
         overflow: "hidden",

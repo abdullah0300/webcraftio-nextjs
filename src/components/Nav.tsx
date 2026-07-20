@@ -106,7 +106,7 @@ export default function Nav({ scrolled, navDocked, activeNav, navBarRef, navFill
           padding: navPad,
           boxShadow: navShadow,
           transition:
-            "padding .35s ease, box-shadow .4s ease, width .55s cubic-bezier(.4,.8,.2,1), gap .4s ease, transform .72s cubic-bezier(.34,1.56,.64,1)",
+            "padding .35s ease, box-shadow .4s ease, width .55s cubic-bezier(.4,.8,.2,1), gap .4s ease, transform .72s cubic-bezier(.34,1.56,.64,1), opacity .3s ease",
           overflow: "hidden",
         }}
       >

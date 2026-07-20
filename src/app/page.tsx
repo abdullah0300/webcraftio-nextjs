@@ -33,6 +33,7 @@ export default function Home() {
   const procTrackRef = useRef<HTMLDivElement>(null);
   const procFillRef = useRef<HTMLDivElement>(null);
   const footRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLElement>(null);
   const navFillRef = useRef<HTMLDivElement>(null);
   const navBarRef = useRef<HTMLDivElement>(null);
 
@@ -141,6 +142,15 @@ export default function Home() {
       if (bar) {
         const drop = window.innerHeight - 36 - bar.offsetHeight;
         bar.style.transform = docked ? `translateY(${drop}px)` : "translateY(0)";
+
+        // The docked pill floats near the bottom of the viewport, which
+        // otherwise overlaps the footer once it scrolls into view. Fade it
+        // out as the footer approaches so it never covers footer content.
+        const footerEl = footerRef.current;
+        const footerTop = footerEl ? footerEl.getBoundingClientRect().top : Infinity;
+        const hideForFooter = docked && footerTop <= window.innerHeight - 36;
+        bar.style.opacity = hideForFooter ? "0" : "1";
+        bar.style.pointerEvents = hideForFooter ? "none" : "auto";
       }
     };
 
@@ -209,7 +219,7 @@ export default function Home() {
       <Services activeService={activeService} setActiveService={setActiveService} clearService={clearService} />
       <Process procWrapRef={procWrapRef} procTrackRef={procTrackRef} procFillRef={procFillRef} procNum={procNum} />
       <CTA intent={intent} setIntent={setIntent} />
-      <Footer footRef={footRef} year={year} />
+      <Footer footRef={footRef} footerRef={footerRef} year={year} />
     </>
   );
 }
