@@ -1178,14 +1178,14 @@ a:hover .viewCaseArrow {
 
   .heroIntroTag {
     align-self: flex-start !important;
-    margin-bottom: 16px !important;
+    margin-bottom: 28px !important;
   }
 
   .heroWidget {
     align-self: flex-start !important;
     text-align: left !important;
     margin-top: 0 !important;
-    margin-bottom: 40px !important;
+    margin-bottom: 56px !important;
     transform: scale(0.9) !important;
     transform-origin: left top !important;
   }
@@ -1203,8 +1203,8 @@ a:hover .viewCaseArrow {
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-start !important;
-    gap: 8px !important;
-    margin-bottom: 40px !important;
+    gap: 10px !important;
+    margin-bottom: 52px !important;
   }
 
   /* "WE BUILD" is a non-wrapping flex row of characters (KineticText), so a
