@@ -177,14 +177,7 @@ export default function Footer({ footRef, footerRef, year }: FooterProps) {
             color: "#6E7B73",
           }}
         >
-          <span>© {year} WebCraftio — Handcrafted from scratch. No templates, just pure vibes.</span>
-          <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
-            <a href="#" className="footerLink" style={{ color: "#6E7B73", textDecoration: "none", transition: "color .25s" }}>
-              Privacy
-            </a>
-            <a href="#" className="footerLink" style={{ color: "#6E7B73", textDecoration: "none", transition: "color .25s" }}>
-              Terms
-            </a>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
             <a
               href="//www.dmca.com/Protection/Status.aspx?ID=d89a7a13-fe94-46e8-9b29-0079d8fe6170"
               title="DMCA.com Protection Status"
@@ -195,6 +188,15 @@ export default function Footer({ footRef, footerRef, year }: FooterProps) {
                 src="https://images.dmca.com/Badges/dmca-badge-w100-5x1-05.png?ID=d89a7a13-fe94-46e8-9b29-0079d8fe6170"
                 alt="DMCA.com Protection Status"
               />
+            </a>
+            © {year} WebCraftio — Handcrafted from scratch. No templates, just pure vibes.
+          </span>
+          <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
+            <a href="#" className="footerLink" style={{ color: "#6E7B73", textDecoration: "none", transition: "color .25s" }}>
+              Privacy
+            </a>
+            <a href="#" className="footerLink" style={{ color: "#6E7B73", textDecoration: "none", transition: "color .25s" }}>
+              Terms
             </a>
             <button
               onClick={toTop}
