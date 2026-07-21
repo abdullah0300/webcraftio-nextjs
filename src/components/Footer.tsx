@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import Script from "next/script";
 
 interface FooterProps {
   footRef: React.RefObject<HTMLDivElement | null>;
@@ -184,6 +185,17 @@ export default function Footer({ footRef, footerRef, year }: FooterProps) {
             <a href="#" className="footerLink" style={{ color: "#6E7B73", textDecoration: "none", transition: "color .25s" }}>
               Terms
             </a>
+            <a
+              href="//www.dmca.com/Protection/Status.aspx?ID=d89a7a13-fe94-46e8-9b29-0079d8fe6170"
+              title="DMCA.com Protection Status"
+              className="dmca-badge"
+              style={{ display: "inline-flex", alignItems: "center" }}
+            >
+              <img
+                src="https://images.dmca.com/Badges/dmca-badge-w100-5x1-05.png?ID=d89a7a13-fe94-46e8-9b29-0079d8fe6170"
+                alt="DMCA.com Protection Status"
+              />
+            </a>
             <button
               onClick={toTop}
               className="backToTop"
@@ -207,6 +219,7 @@ export default function Footer({ footRef, footerRef, year }: FooterProps) {
           </div>
         </div>
       </div>
+      <Script id="dmca-badge-helper" src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js" strategy="lazyOnload" />
     </footer>
   );
 }
